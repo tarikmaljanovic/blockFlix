@@ -4,15 +4,11 @@ pragma solidity 0.8.23;
 contract Blockflix {
     struct Member {
         address addr;
-        string first_name;
-        string last_name;
         string[] movies;
     }
     
     struct MemberPlus {
         address addr;
-        string first_name;
-        string last_name;
         string date;
     }
 
@@ -31,20 +27,19 @@ contract Blockflix {
         _;
     }
 
-    modifier onlyMember {
-        require(members[msg.sender].addr == msg.sender, "Not Member");
+    modifier createMember {
+        if(owner != members[owner].addr) {
+            members[owner] = Member({addr: owner, movies: new string[](0)});
+        }
         _;
     }
 
     event MoviePurchased(string);
 
-    modifier onlyMemberPlus {
-        require(plus_members[msg.sender].addr == msg.sender, "Not MemberPlus");
-        _;
-    }
 
-    function buyMovie(string memory movieName) public payable onlyOwner onlyMember {
+    function buyMovie(string memory movieName) public payable onlyOwner createMember {
         require(msg.value == 1000000000000000000, "Insufficient funds");
+
         members[msg.sender].movies.push(movieName);
         
         (bool sent, ) = blockFlix.call{value: msg.value}("");
@@ -52,9 +47,12 @@ contract Blockflix {
         emit MoviePurchased("Movie purchased successfully!");
     }
 
-    function subscribe() public payable onlyOwner onlyMemberPlus {
+    function subscribe(string memory date) public payable onlyOwner {
         
     }
 
+    function getMemberMovies() public view onlyOwner returns (string[] memory) {
+        return members[msg.sender].movies;
+    }
 
 }
