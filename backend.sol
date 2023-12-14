@@ -1,53 +1,60 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.18;
+pragma solidity 0.8.23;
 
-contract BlockFlix{
-
-    struct Member{
+contract Blockflix {
+    struct Member {
         address addr;
         string first_name;
         string last_name;
-        
-    }
-
-    struct MemberPlus{
-        address addr;
-        string first_name;
-        string last_name;
-        string date; 
         string[] movies;
     }
+    
+    struct MemberPlus {
+        address addr;
+        string first_name;
+        string last_name;
+        string date;
+    }
 
-    address owner; 
+    address owner;
+    address blockFlix = 0x174Ea06678e76f5453Bc43D45976fb3461f76867;
 
     mapping (address => Member) members;
     mapping (address => MemberPlus) plus_members;
 
-    constructor(){
-        owner == msg.sender;
+    constructor() {
+        owner = msg.sender;
     }
 
-     modifier onlyOwner{
-        require(msg.sender == owner, "Only owner can call this function");
+    modifier onlyOwner {
+        require(msg.sender == owner, "Not owner.");
+        _;
+    }
+
+    modifier onlyMember {
+        require(members[msg.sender].addr == msg.sender, "Not Member");
         _;
     }
 
     event MoviePurchased(string);
 
-    
-     modifier onlyMember{
-        require(members[msg.sender].addr == msg.sender, "Only member can call this function");
+    modifier onlyMemberPlus {
+        require(plus_members[msg.sender].addr == msg.sender, "Not MemberPlus");
         _;
     }
 
-     modifier onlyMemberPlus{
-        require(plus_members[msg.sender].addr == msg.sender, "Only plus member can call this function");
-        _;
-    }
-
-    function buyMovie() public payable onlyOwner onlyMember {
+    function buyMovie(string memory movieName) public payable onlyOwner onlyMember {
         require(msg.value == 1000000000000000000, "Insufficient funds");
+        members[msg.sender].movies.push(movieName);
         
-
+        (bool sent, ) = blockFlix.call{value: msg.value}("");
+        require(sent, "Transaction failed");
+        emit MoviePurchased("Movie purchased successfully!");
     }
+
+    function subscribe() public payable onlyOwner onlyMemberPlus {
+        
+    }
+
+
 }
