@@ -35,10 +35,11 @@ contract Blockflix {
     }
 
     event MoviePurchased(string);
+    event Subscribed(string);
 
 
     function buyMovie(string memory movieName) public payable onlyOwner createMember {
-        require(msg.value == 1000000000000000000, "Insufficient funds");
+        require(msg.value >= 10, "Insufficient funds");
 
         members[msg.sender].movies.push(movieName);
         
@@ -48,11 +49,20 @@ contract Blockflix {
     }
 
     function subscribe(string memory date) public payable onlyOwner {
-        
+        require(msg.value >= 50, "Insufficient funds");
+
+        plus_members[msg.sender] = MemberPlus({addr: owner, date: date});
+        (bool sent, ) = blockFlix.call{value: msg.value}("");
+        require(sent, "Transaction failed");
+        emit Subscribed("Subscribed successfully");
     }
 
     function getMemberMovies() public view onlyOwner returns (string[] memory) {
         return members[msg.sender].movies;
+    }
+
+    function getSubscriptionDate() public view onlyOwner returns (string memory) {
+        return plus_members[owner].date;
     }
 
 }
