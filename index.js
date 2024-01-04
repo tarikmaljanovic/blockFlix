@@ -11,9 +11,13 @@ $("#connectBtn").click(async function () {
 
         console.log(addresses);
 
-        if(addresses.includes('0x8756ce22ab4ea8bb5b0d1e6fa8447cde6b25f355') == false) {
-            $('#create-movie').hide()
+        var owner1 = '0x8756ce22ab4ea8bb5b0d1e6fa8447cde6b25f355';
+        var owner2 = '0x39c342a73a510Bc52E059Bac8b1fD530a793B678';
+        
+        if (!addresses.includes(owner1) || !addresses.includes(owner2)) {
+            $('#create-movie').hide();
         }
+        
             
         $("#connect").slideUp("slow", function () {
             setTimeout(function () {
@@ -56,12 +60,19 @@ async function getMovies() {
             <div id="${(await movie).id}" class="movie">
                 <p class="text">${(await movie).name}</p>
                 <p class="text">${(await movie).price} Wei</p>
-                <button type="button" class="btn btn-success">Buy</button>
+                <button type="button" class="btn btn-success buy-button">Buy</button>
             </div>
         `
     }
     $('#movies').append(html)
+
+
+    $('.buy-button').click(function() {
+        let movieId = $(this).parent().attr('id');
+        buyMovie(movieId);
+    });
 }
+
 
 async function createMovie(movieName, price) {
     const contract = new web3.eth.Contract(abi, address);
@@ -78,4 +89,46 @@ async function getUserType() {
 
     console.log(type)
 }
+
+async function buyMovie(id) {
+    const contract = new web3.eth.Contract(abi, address);
+    let addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+    contract.methods.buyMovie(id).send({ from: addresses[0] }).then(function (result) {	
+        console.log(result);
+    })
+}
+
+let memberMovies = [];
+
+async function getMembersMovies(){
+    const contract = new web3.eth.Contract(abi, address);
+    let movies = await contract.methods.getAllMovies().call();
+
+    let content = '';
+
+    for (let movie of movies) {
+
+        let isMemberMovie = memberMovies.includes((await movie).id);
+
+        content += `
+            <div id="${(await movie).id}" class="movie">
+                <p class="text">${(await movie).name}</p>
+                <p class="text">${(await movie).price} Wei</p>
+                ${isMemberMovie ? '<button type="button" class="btn btn-primary watch-button">Watch Now</button>' : '<button type="button" class="btn btn-success buy-button">Buy</button>'}
+            </div>
+        `;
+    }
+    $('#movies').html(content);
+}
+
+function onMoviePurchased(id) {
+    memberMovies.push(id);
+    
+    getMembersMovies();
+}
+
+
+
+
 
