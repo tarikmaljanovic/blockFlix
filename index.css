@@ -17,11 +17,10 @@ body{
 #connect h1{
     color: white;
 }
-.movies {
-    display: none;
-}
 #movies {
     display: flex;
+    justify-content: flex-start;
+    align-items: center;
     flex-direction: column;
     margin-top: 20px;
     padding: 20px;
@@ -31,32 +30,39 @@ body{
     text-align: center;
     height: 800px;
     width: 1200px;
+    overflow: scroll;
 }
-.movie img{
-    width:100px;
-    height: 130px;
-    margin: 20px 20px 10px 20px;
-}
-.movie:hover img {
-    filter: brightness(80%);
-    cursor: pointer;
-}
-.movie img {
-    transition: filter 0.3s ease;
-}
-.movie h3{
-    font-size: 12px;
-    justify-content: center;
-    text-align: center;
-}
-.movierow{
+.movie {
+    width: 100%;
     display: flex;
+    align-items: center;
+    justify-content: space-evenly;
     flex-direction: row;
-    height: 140px;
-    width: 1200px;
-    padding-left: 20px;
-    margin-bottom: 20px;
+    padding: 10px;
+    background-color: whitesmoke;
+    border-radius: 20px;
+    margin-bottom: 10px;
 }
-.modal-footer{
-    margin-right: 160px;
+
+.movie .text {
+    margin: 0;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+#create-movie {
+    width: 30%;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    align-self: flex-start;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.button-group {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
 }

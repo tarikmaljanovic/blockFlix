@@ -4,11 +4,13 @@ pragma solidity 0.8.23;
 contract Blockflix {
     struct Member {
         address addr;
+        string user_type;
         string[] movies;
     }
     
     struct MemberPlus {
         address addr;
+        string user_type;
         string date;
     }
 
@@ -30,7 +32,7 @@ contract Blockflix {
     constructor() {
         owner = msg.sender;
         blockFlix = 0x174Ea06678e76f5453Bc43D45976fb3461f76867;
-        subscriptionPrice = 10;
+        subscriptionPrice = 1000000;
     }
 
     modifier onlyOwner {
@@ -40,7 +42,7 @@ contract Blockflix {
 
     modifier createMember {
         if(msg.sender != members[msg.sender].addr) {
-            members[msg.sender] = Member({addr: msg.sender, movies: new string[](0)});
+            members[msg.sender] = Member({addr: msg.sender, user_type: "Member", movies: new string[](0)});
         }
         _;
     }
@@ -59,10 +61,28 @@ contract Blockflix {
         emit MoviePurchased("Movie purchased successfully!");
     }
 
+    function getUserType() public view returns(string memory) {
+        if(msg.sender == members[msg.sender].addr) {
+            return members[msg.sender].user_type;
+        } else if(msg.sender == plus_members[msg.sender].addr) {
+            return plus_members[msg.sender].user_type;
+        }
+        return "NoUser";
+    }
+
     function subscribe(string memory date) public payable {
         require(msg.value == subscriptionPrice, "Insufficient funds");
 
-        plus_members[msg.sender] = MemberPlus({addr: msg.sender, date: date});
+        if(msg.sender != plus_members[msg.sender].addr) {
+            plus_members[msg.sender] = MemberPlus({addr: msg.sender, user_type: "MemberPlus", date: date});
+        } else {
+            plus_members[msg.sender].date = date;
+        }
+
+        if(msg.sender == members[msg.sender].addr) {
+            delete members[msg.sender];
+        }
+        
         (bool sent, ) = blockFlix.call{value: msg.value}("");
         require(sent, "Transaction failed");
         emit Subscribed("Subscribed successfully");
@@ -88,10 +108,4 @@ contract Blockflix {
         }
         return  _movies;
     }
-
-    function getAllPlusMembers() public view returns (string memory) {
-        return plus_members[msg.sender].date;
-    }
-
-
 }
