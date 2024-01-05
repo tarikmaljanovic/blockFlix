@@ -73,6 +73,48 @@ async function getMovies() {
     });
 }
 
+$('#pay-subscription').on('click', async function () {
+    try {
+        await paySubscription();
+
+        const currentDate = new Date();
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        memberSubscriptionExpiry = currentDate;
+
+        localStorage.setItem('memberSubscriptionExpiry', memberSubscriptionExpiry.toString());
+
+        displayMemberSubscription();
+    } catch (error) {
+        console.error('Error while purchasing subscription:', error);
+    }
+});
+
+async function paySubscription() {
+    const contract = new web3.eth.Contract(abi, address);
+    let addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+    contract.methods.subscribe().send({ from: addresses[0], value: 1000000}).then(async function (result) {	
+        console.log("Subscription:", result);
+
+    });
+}
+
+function displayMemberSubscription() {
+    const storedExpiry = localStorage.getItem('memberSubscriptionExpiry');
+    
+    if (storedExpiry) {
+        memberSubscriptionExpiry = new Date(storedExpiry);
+
+        console.log('Member subscription expiry:', memberSubscriptionExpiry);
+    } else {
+        console.log('Member has no active subscription.');
+    }
+}
+
+$(document).ready(function () {
+    displayMemberSubscription();
+});
+
 
 async function createMovie(movieName, price) {
     const contract = new web3.eth.Contract(abi, address);
@@ -85,9 +127,9 @@ async function createMovie(movieName, price) {
 
 async function getUserType() {
     const contract = new web3.eth.Contract(abi, address);
-    let type = await contract.methods.getUserType().call();
+    let type = await contract.methods.getUserType().call({from: '0x39c342a73a510Bc52E059Bac8b1fD530a793B678'});
 
-    console.log(type)
+    console.log(await type)
 }
 
 async function buyMovie(id) {
@@ -100,27 +142,28 @@ async function buyMovie(id) {
         onMoviePurchased(id);
     });
 }
-
 let memberMovies = [];
 
-async function getMembersMovies(){
-    console.log("getMembersMovies called");
-    
+async function getMembersMovies() {
     const contract = new web3.eth.Contract(abi, address);
+    let addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
     let movies = await contract.methods.getAllMovies().call();
+    let userMovies = await contract.methods.getMemberMovies().call({from: addresses[0]});
+    console.log(userMovies)
 
     let content = '';
 
     for (let movie of movies) {
         let movieId = (await movie).id.toString(); 
 
-        let isMemberMovie = memberMovies.includes(movieId);
+        let isMemberMovie = userMovies.includes(movie.name)
+        console.log(isMemberMovie)
 
         content += `
             <div id="${movieId}" class="movie">
                 <p class="text">${(await movie).name}</p>
                 <p class="text">${(await movie).price} Wei</p>
-                ${isMemberMovie ? '<button type="button" class="btn btn-primary watch-button">Watch Now</button>' : '<button type="button" class="btn btn-success buy-button">Buy</button>'}
+                ${isMemberMovie ? `<button type="button" class="btn btn-primary watch-button">Watch Now</button>` : `<button onclick="buyMovie(${(await movie).id})" type="button" class="btn btn-success buy-button">Buy</button>`}
             </div>
         `;
     }
@@ -130,11 +173,8 @@ async function getMembersMovies(){
 
 function onMoviePurchased(id) {
     console.log("Movie Purchased:", id);
-    memberMovies.push(id);
-
     getMembersMovies();
 }
-
 
 
 
