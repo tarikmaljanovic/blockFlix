@@ -14,7 +14,7 @@ $("#connectBtn").click(async function () {
         var owner1 = '0x8756ce22ab4ea8bb5b0d1e6fa8447cde6b25f355';
         var owner2 = '0x39c342a73a510Bc52E059Bac8b1fD530a793B678';
         
-        if(addresses.includes("0x39c342a73a510bc52e059bac8b1fd530a793b678") == false || addresses.includes("0x8756ce22ab4ea8bb5b0d1e6fa8447cde6b25f355") ) {
+        if(addresses.includes("0x39c342a73a510bc52e059bac8b1fd530a793b678") == false) {
             $("#create-movie").hide()
         }
         
@@ -94,25 +94,30 @@ async function buyMovie(id) {
     const contract = new web3.eth.Contract(abi, address);
     let addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
 
-    contract.methods.buyMovie(id).send({ from: addresses[0] }).then(function (result) {	
-        console.log(result);
-    })
+    contract.methods.buyMovie(id).send({ from: addresses[0], value: 55}).then(async function (result) {	
+        console.log("Buy Movie Result:", result);
+
+        onMoviePurchased(id);
+    });
 }
 
 let memberMovies = [];
 
 async function getMembersMovies(){
+    console.log("getMembersMovies called");
+    
     const contract = new web3.eth.Contract(abi, address);
     let movies = await contract.methods.getAllMovies().call();
 
     let content = '';
 
     for (let movie of movies) {
+        let movieId = (await movie).id.toString(); 
 
-        let isMemberMovie = memberMovies.includes((await movie).id);
+        let isMemberMovie = memberMovies.includes(movieId);
 
         content += `
-            <div id="${(await movie).id}" class="movie">
+            <div id="${movieId}" class="movie">
                 <p class="text">${(await movie).name}</p>
                 <p class="text">${(await movie).price} Wei</p>
                 ${isMemberMovie ? '<button type="button" class="btn btn-primary watch-button">Watch Now</button>' : '<button type="button" class="btn btn-success buy-button">Buy</button>'}
@@ -122,9 +127,11 @@ async function getMembersMovies(){
     $('#movies').html(content);
 }
 
+
 function onMoviePurchased(id) {
+    console.log("Movie Purchased:", id);
     memberMovies.push(id);
-    
+
     getMembersMovies();
 }
 
