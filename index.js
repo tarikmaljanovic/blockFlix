@@ -1,5 +1,5 @@
 const abi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"string","name":"","type":"string"}],"name":"MoviePurchased","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"string","name":"","type":"string"}],"name":"Subscribed","type":"event"},{"inputs":[{"internalType":"uint256","name":"movieId","type":"uint256"}],"name":"buyMovie","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"string","name":"movieName","type":"string"},{"internalType":"uint256","name":"price","type":"uint256"}],"name":"createMovie","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getAllMovies","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"string","name":"name","type":"string"},{"internalType":"uint256","name":"price","type":"uint256"}],"internalType":"struct Blockflix.Movie[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getMemberMovies","outputs":[{"internalType":"string[]","name":"","type":"string[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getSubscriptionDate","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getUserType","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"date","type":"string"}],"name":"subscribe","outputs":[],"stateMutability":"payable","type":"function"}]
-const address = "0x048D0f806Ca2E7d78694Fe09B1658685135BE7DA"
+const address = "0x1383f90dC91374587c8E1C5E6bf37C04aC86B99a";
 
 $("#movies").hide();
 $('.alert').hide();
@@ -14,8 +14,8 @@ $("#connectBtn").click(async function () {
         var owner1 = '0x8756ce22ab4ea8bb5b0d1e6fa8447cde6b25f355';
         var owner2 = '0x39c342a73a510Bc52E059Bac8b1fD530a793B678';
         
-        if (!addresses.includes(owner1) || !addresses.includes(owner2)) {
-            $('#create-movie').hide();
+        if(addresses.includes("0x39c342a73a510bc52e059bac8b1fd530a793b678") == false || addresses.includes("0x8756ce22ab4ea8bb5b0d1e6fa8447cde6b25f355") ) {
+            $("#create-movie").hide()
         }
         
             
