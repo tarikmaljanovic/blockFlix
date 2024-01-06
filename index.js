@@ -111,6 +111,8 @@ async function buyMovie(id, price) {
         console.log("Buy Movie Result:", result);
     });
 
+    getMembersMovies()
+
     contract.events.MoviePurchased().on('data', function (event) {
         console.log(event);
         $('#success-msg').html('You have successfully purchased a movie!')
@@ -130,7 +132,7 @@ async function createMovie(movieName, price) {
         console.log(result);
     })
 
-    window.location.reload()
+    getMembersMovies()
 }
 
 async function getUserType() {
@@ -162,6 +164,8 @@ async function paySubscription(date) {
     contract.methods.subscribe(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`).send({ from: addresses[0], value: 1000000}).then(async function (result) {	
         console.log("Subscription:", result);
     });
+
+    getMembersMovies()
 
     contract.events.Subscribed().on('data', function (event) {
         console.log(event);
