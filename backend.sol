@@ -88,7 +88,7 @@ contract Blockflix {
         emit Subscribed("Subscribed successfully");
     }
 
-    function getMemberMovies() public view returns (string[] memory) {
+    function getMemberMovies() external  view returns (string[] memory) {
         return members[msg.sender].movies;
     }
 

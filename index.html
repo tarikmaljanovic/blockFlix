@@ -14,14 +14,21 @@
     </head>
     <body>
         <div id="container">
+            <div class="alert alert-success" id="success-msg" role="alert">
+                You have successfully purchased a movie!
+            </div>
             <div id="connect">
                 <h1>Welcome to BlockFlix.</h1>
                 <button id="connectBtn" type="button" class="btn btn-danger btn-lg">Connect Via MetaMask</button>
             </div>
             <div id="movies">
-                <button type="button" id="create-movie" class="btn btn-danger">Create Movie</button>
-                <button type="button" id="pay-subscription" class="btn btn-danger">Subscribe</button>
-
+                <div class="movies-button-group">
+                    <button type="button" id="create-movie" class="btn btn-danger">Create Movie</button>
+                    <button type="button" id="pay-subscription" class="btn btn-danger">Subscribe</button>
+                </div>
+                <div class="movies-inner">
+                    
+                </div>
             </div>
             <div class="modal" id="movieModal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
@@ -30,7 +37,7 @@
                             <h5 class="modal-title">Create Movie</h5>
                         </div>
                         <div class="modal-body">
-                            <div class="alert alert-danger" role="alert">
+                            <div class="alert alert-danger" id="creation-error" role="alert">
                                 Please fill out every field!
                             </div>
                             <div class="mb-3">
@@ -49,8 +56,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
         </div>
         <script src="./index.js"></script>
     </body>

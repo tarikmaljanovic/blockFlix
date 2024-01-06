@@ -32,6 +32,11 @@ body{
     width: 1200px;
     overflow: scroll;
 }
+
+.movies-inner {
+    width: 100%;
+}
+
 .movie {
     width: 100%;
     display: flex;
@@ -45,8 +50,14 @@ body{
 }
 
 .movie .text {
+    width: 33.33%;
+    text-align: left;
     margin: 0;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.movie .btn {
+    width: 110px;
 }
 
 #create-movie {
@@ -73,4 +84,16 @@ body{
     display: flex;
     width: 100%;
     justify-content: space-between;
+}
+
+.movies-button-group {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+#success-msg {
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
