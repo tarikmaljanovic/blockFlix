@@ -33,20 +33,63 @@ body{
     overflow: scroll;
 }
 
+.admin {
+    display: flex;
+    align-self: flex-start;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.admin p {
+    margin: 0 5px;
+}
+
 .movies-inner {
     width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
 }
 
 .movie {
-    width: 100%;
+    width: 30%;
+    margin: 0 5px;
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
     flex-direction: row;
     padding: 10px;
     background-color: whitesmoke;
     border-radius: 20px;
     margin-bottom: 10px;
+}
+
+.img-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.img-container img {
+    width: 100px;
+    height: 150px;
+}
+
+.right {
+    width: 100%;
+    height: 100%;
+    margin-left: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.right p {
+    padding: 5px 0px;
 }
 
 .movie .text {
@@ -72,7 +115,13 @@ body{
     margin-bottom: 20px;
     border-radius: 20px;
     align-self: flex-end;
+}
 
+#logout {
+    width: 30%;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    align-self: flex-end;
 }
 
 .modal-body {

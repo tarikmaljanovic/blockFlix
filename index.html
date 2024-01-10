@@ -22,12 +22,17 @@
                 <button id="connectBtn" type="button" class="btn btn-danger btn-lg">Connect Via MetaMask</button>
             </div>
             <div id="movies">
+                <div class="admin">
+                    <img src="./movies/user-regular.svg"/>
+                    <p class="admin-name"></p>
+                </div>
                 <div class="movies-button-group">
                     <button type="button" id="create-movie" class="btn btn-danger">Create Movie</button>
                     <button type="button" id="pay-subscription" class="btn btn-danger">Subscribe</button>
+                    <button type="button" id="logout" class="btn btn-secondary">Log out</button>
                 </div>
                 <div class="movies-inner">
-                    
+
                 </div>
             </div>
             <div class="modal" id="movieModal" tabindex="-1" role="dialog">
@@ -47,6 +52,10 @@
                               <div class="mb-3">
                                 <label for="movie-prive" class="form-label">Price</label>
                                 <input type="number" class="form-control" id="movie-price">
+                              </div>
+                              <div class="mb-3">
+                                <label for="movie-img" class="form-label">Image URL</label>
+                                <input type="text" class="form-control" id="movie-img">
                               </div>
                             <div class="button-group">
                                 <button id="create-button" type="button" class="btn btn-success">Create Movie</button>
