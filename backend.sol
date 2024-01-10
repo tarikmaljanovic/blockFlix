@@ -21,6 +21,7 @@ contract Blockflix {
     }
 
     address owner;
+    address owner2;
     address blockFlix;
     uint nextId = 0;
     uint subscriptionPrice;
@@ -31,12 +32,13 @@ contract Blockflix {
 
     constructor() {
         owner = msg.sender;
+        owner2 = 0x39c342a73a510Bc52E059Bac8b1fD530a793B678;
         blockFlix = 0x174Ea06678e76f5453Bc43D45976fb3461f76867;
         subscriptionPrice = 1000000;
     }
 
     modifier onlyOwner {
-        require(msg.sender == owner, "Not owner.");
+        require(msg.sender == owner || msg.sender == owner2, "Not owner.");
         _;
     }
 
